@@ -27,7 +27,7 @@ function App() {
   const [url, setUrl] = useState();
 
   const createPdf = () => {
-    const pdfGenerator = pdfMake.createPdf();
+    const pdfGenerator = pdfMake.createPdf(rowData);
     //console.log(pdfGenerator);
     pdfGenerator.getBlob((blob) => {
       const url = URL.createObjectURL(blob);
@@ -47,6 +47,11 @@ function App() {
         }}
       >
         <button onClick={createPdf}>Export to PDF</button>
+        {url && (
+          <a href={url} target="__blank">
+            link
+          </a>
+        )}
         <div
           className="ag-theme-quartz" // applying the Data Grid theme
           style={{
