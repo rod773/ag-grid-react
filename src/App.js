@@ -2,6 +2,9 @@ import { useState } from "react";
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function App() {
   const [rowData, setRowData] = useState([
@@ -21,23 +24,33 @@ function App() {
     { field: "electric" },
   ]);
 
+  const [gridApi, setGridApi] = useState(rowData);
+
   const defaultColDef = {
     flex: 1,
   };
   return (
     <>
       <div
-        className="ag-theme-quartz" // applying the Data Grid theme
         style={{
-          height: "100%",
           width: "100%",
-        }} // the Data Grid will fill the size of the parent container
+          height: "100%",
+        }}
       >
-        <AgGridReact
-          rowData={rowData}
-          columnDefs={colDefs}
-          defaultColDef={defaultColDef}
-        />
+        <button onClick={() => {}}>Export to PDF</button>
+        <div
+          className="ag-theme-quartz" // applying the Data Grid theme
+          style={{
+            height: "100%",
+            width: "100%",
+          }} // the Data Grid will fill the size of the parent container
+        >
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={colDefs}
+            defaultColDef={defaultColDef}
+          />
+        </div>
       </div>
     </>
   );
