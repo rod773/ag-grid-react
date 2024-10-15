@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -24,10 +24,51 @@ function App() {
     { field: "electric" },
   ]);
 
+  const getData = () => {
+    var pdfData = [];
+
+    var line = [];
+
+    colDefs.forEach((item) => {
+      line.push(item.field);
+    });
+
+    pdfData.push(line);
+
+    rowData.forEach((item) => {
+      var line = [];
+
+      line.push(item.make);
+      line.push(item.model);
+      line.push(item.price);
+      line.push(item.electric);
+
+      pdfData.push(line);
+    });
+
+    return pdfData;
+  };
+
   const [url, setUrl] = useState();
 
+  var docDefinition = {
+    content: [
+      {
+        layout: "lightHorizontalLines", // optional
+        table: {
+          // headers are automatically repeated if the table spans over multiple pages
+          // you can declare how many rows should be treated as headers
+          headerRows: 1,
+          widths: ["*", "auto", 100, "*"],
+
+          body: getData(),
+        },
+      },
+    ],
+  };
+
   const createPdf = () => {
-    const pdfGenerator = pdfMake.createPdf(rowData);
+    const pdfGenerator = pdfMake.createPdf(docDefinition);
     //console.log(pdfGenerator);
     pdfGenerator.getBlob((blob) => {
       const url = URL.createObjectURL(blob);
@@ -38,6 +79,10 @@ function App() {
   const defaultColDef = {
     flex: 1,
   };
+
+  useEffect(() => {
+    console.dir(getData());
+  }, []);
   return (
     <>
       <div
