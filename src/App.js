@@ -24,7 +24,16 @@ function App() {
     { field: "electric" },
   ]);
 
-  const [gridApi, setGridApi] = useState(rowData);
+  const [url, setUrl] = useState();
+
+  const createPdf = () => {
+    const pdfGenerator = pdfMake.createPdf();
+    //console.log(pdfGenerator);
+    pdfGenerator.getBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      setUrl(url);
+    });
+  };
 
   const defaultColDef = {
     flex: 1,
@@ -37,7 +46,7 @@ function App() {
           height: "100%",
         }}
       >
-        <button onClick={() => {}}>Export to PDF</button>
+        <button onClick={createPdf}>Export to PDF</button>
         <div
           className="ag-theme-quartz" // applying the Data Grid theme
           style={{
